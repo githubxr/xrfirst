@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: user-start   # 其他模块按需改
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+server:
+  port: 8001   # 自己定义
