@@ -12,26 +12,56 @@
     <artifactId>common</artifactId>
 
     <dependencies>
+
+        <!-- 核心 Spring 基础：支持 @Service、@Component、@Transactional -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
 
-        <!--集成springmvc框架并实现自动配置 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <!-- Retry
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+-->
+
+        <!-- 序列化工具，例如 fastjson2 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.52</version>
+        </dependency>
+
+        <!-- Redis（如果业务统一需要可放这里，否则拆到 infra 模块） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <!-- Redisson（可选） -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.24.3</version>
+        </dependency>
+
+        <!-- Mybatis 或 Mybatis-Plus（必要时） -->
+        <!--
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        -->
+
     </dependencies>
+
+
+
 
 </project>

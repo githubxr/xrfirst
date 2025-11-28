@@ -9,9 +9,12 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>base-core</module>
         <module>common</module>
-        <module>user</module>
         <module>order</module>
+        <module>user</module>
+        <module>gateway</module>
+        <module>base-feign</module>
     </modules>
 
 

@@ -12,9 +12,15 @@
     <artifactId>order-api</artifactId>
 
     <dependencies>
+        <!-- feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.first</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>base-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -25,5 +31,6 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
 </project>

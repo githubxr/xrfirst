@@ -1,9 +1,33 @@
 spring:
   application:
-    name: user-start   # 其他模块按需改
+    name: user   # 其他模块按需改
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
 server:
   port: 8001   # 自己定义
+
+feign:
+  sentinel:  #fallbackFacotry需要sentinel依赖
+    enabled: true #添加熔断
+    config:
+      default:
+        loggerLevel: FULL  # 打印请求/响应的详细信息
+
+        connectTimeout: 5000  # 5秒连接超时
+        readTimeout: 5000     # 5秒读取超时
+        retryer:
+          period: 6000      # 初始间隔
+          maxPeriod: 10000  # 最大间隔
+          maxAttempts: 3   # 最大尝试次数
+
+logging:
+  file:
+    name: logs/user-feign.log   # 日志文件路径
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    org.first.order.api.OrderApi: DEBUG
+    #其它的feignClient同上
+

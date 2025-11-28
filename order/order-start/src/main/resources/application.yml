@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: order   # 其他模块按需改
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+server:
+  port: 8002   # 自己定义
+
+feign:
+  sentinel:  #fallbackFacotry需要sentinel依赖
+    enabled: true #添加熔断
+  client:
+    config:
+      default:
+        connectTimeout: 5000  # 5秒连接超时
+        readTimeout: 5000     # 5秒读取超时
+        retryer:
+          period: 100      # 初始间隔
+          maxPeriod: 1000  # 最大间隔
+          maxAttempts: 2   # 最大尝试次数
+
+logging:
+  level:
+    com.example.user.feign.OrderFeignClient: DEBUG
