@@ -26,23 +26,25 @@ public class Jsr223FuncCache {
 
     // 初始化并缓存脚本（线程安全）
     public static void initScriptForTemplate(String templateId, String scriptContent) {
-        try {
-            //获取引擎
-            ScriptEngine engine = MANAGER.getEngineByName("groovy");
-            if (engine == null) {
-                throw new RuntimeException("未找到 Groovy 脚本引擎，请检查依赖");
+
+        // eval 脚本（请确保脚本不包含危险操作）
+        //执行脚本，把脚本里的 def 函数都定义到 engine 的上下文里
+        INVOCABLE_MAP.computeIfAbsent(templateId, id -> {
+            try {
+
+                ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
+                if (engine == null) {
+                    throw new RuntimeException("未找到 Groovy 脚本引擎，请检查依赖");
+                }
+                engine.eval(scriptContent);
+                if (!(engine instanceof Invocable)) {
+                    throw new RuntimeException("脚本引擎不支持 Invocable");
+                }
+                return (Invocable) engine;
+            } catch (Exception e) {
+                throw new RuntimeException("脚本加载失败：" + templateId, e);
             }
-            // eval 脚本（请确保脚本不包含危险操作）
-            //执行脚本，把脚本里的 def 函数都定义到 engine 的上下文里
-            engine.eval(scriptContent);
-            if (!(engine instanceof Invocable)) {
-                throw new RuntimeException("脚本引擎不支持 Invocable");
-            }
-            //全局缓存
-            INVOCABLE_MAP.put(templateId, (Invocable) engine);
-        } catch (ScriptException e) {
-            throw new RuntimeException("初始化脚本失败: ", e);
-        }
+        });
     }
 
 

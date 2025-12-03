@@ -1,88 +1,108 @@
 package org.first.temp.utils;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import freemarker.template.*;
-import org.first.basecore.util.IoUtil;
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.first.temp.dto.FtlModel;
 import org.first.temp.utils.groovy.GroovyFunctionContainer;
 import org.first.temp.utils.groovy.Jsr223FuncCache;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
-/**
- * pdf工具类
- * @since 25/12/01
- * */
+
+
 @Component
 public class PdfUtil {
-    //freemarker配置
-    private static Configuration defConfig = null;
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    private static String tempCss = new String(IoUtil.readToStr("static/def.css"));//样式
-    private static byte[] simpFontData = IoUtil.getBytesByPath("static/font/sim.ttf");//字体
+    private final Configuration freemarkerCfg;
+    private final Executor pdfExecutor;
+    private final ResourceLoader resourceLoader;
+    private final ObjectMapper objectMapper;
 
+    private String defaultCss = null;
+    private byte[] fallbackFont = null;
 
-    //初始化freemarker配置
-    static {
-        defConfig = new Configuration(new Version("2.3.28"));
-        defConfig.setDefaultEncoding("UTF-8");
-        defConfig.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);//忽略无数据的占位符
-        defConfig.setOutputFormat(freemarker.core.XHTMLOutputFormat.INSTANCE);//自动转XHTML
-        defConfig.setLogTemplateExceptions(false);
-        defConfig.setWrapUncheckedExceptions(true);
+    private StringTemplateLoader dynamicLoader;
 
+    //Qualifier指定注入自己配置的（by name）
+    @Autowired
+    public PdfUtil(@Qualifier("freemarkerConfig") freemarker.template.Configuration freemarkerCfg,
+                   @Qualifier("pdfExecutor") Executor pdfExecutor,
+                   ResourceLoader resourceLoader,
+                   ObjectMapper objectMapper) {
+        this.freemarkerCfg = freemarkerCfg;
+        this.pdfExecutor = pdfExecutor;
+        this.resourceLoader = resourceLoader;
+        this.objectMapper = objectMapper;
+        // Freemarker 动态 loader
+        this.dynamicLoader = (StringTemplateLoader)
+                freemarkerCfg.getSharedVariable("dynamicLoader");
     }
 
-    //批量渲染pdf
-    public static void genPdfBatchToDir(FtlModel model, List<String> dataList) {
 
-        String content = model.getContentRef();//读取模板文件内容
-        String firstHeader = model.getFirstHeaderRef();//读取模板文件内容
-        String secHeader = model.getSecHeaderRef();//读取模板文件内容
-
-        StringBuilder sb = new StringBuilder(10240);
-        sb.append("<html><head><style>").append(tempCss).append("</style></head>")
-                .append("<body>")
-                .append(content)
-        ;
-        if( ! StringUtils.isEmpty(firstHeader)) {
-            sb.append("<div class='page-header-first'>")
-                    .append(firstHeader)
-                    .append("</div>")
-            ;
-        }
-        sb.append("</body></html>");
-
-        Template template = null;
-
+    // lazy load common assets
+    @PostConstruct
+    public void init() {
         try {
-            template = new Template("defName", new StringReader(sb.toString()), defConfig);
-        } catch (IOException e){
-            throw new RuntimeException("构造模板失败！" + e.getMessage());
-        }
-        long start = System.currentTimeMillis();
-        Template finalTemp = template;
-        dataList.parallelStream().forEach(item -> genPdfToDir(model, finalTemp, item));
-        //for(String item : dataList) genPdfToDir(model, finalTemp, item);
-        long cost = System.currentTimeMillis() - start;
-        System.out.println("耗时：" + cost);
+            Resource css = resourceLoader.getResource("classpath:static/def.css");
+            if (css.exists()) defaultCss = new String(css.getInputStream().readAllBytes());
+
+            Resource f = resourceLoader.getResource("classpath:static/font/sim.ttf");
+            if (f.exists()) fallbackFont = f.getInputStream().readAllBytes();
+
+        } catch (Exception ignore) {}
     }
 
     /**
-     * @description 渲染一个pdf
-     * @param temp 模板配置信息
-     * @param json 数据
-     * */
-    public static void genPdfToDir(FtlModel model, Template temp, String json) {
+     * Batch render using an executor. Returns list of output file paths.
+     */
+    public void genPdfBatchToDir(FtlModel model, List<String> dataList) {
+        if (model == null || StringUtils.isEmpty(model.getSavePath())) {
+            throw new IllegalArgumentException("FtlModel or savePath is empty");
+        }
+        // 构造一次模板内容
+        String fullHtml = buildHtml(model);
+
+        String templateKey = "tpl_" + model.getTemplateName();
+        dynamicLoader.putTemplate(templateKey, fullHtml);
+
+        Template tpl;
+        try {
+            tpl = freemarkerCfg.getTemplate(templateKey);
+        } catch (IOException e) {
+            throw new RuntimeException("模板加载失败", e);
+        }
+
+        List<CompletableFuture<Void>> list = new ArrayList<>();
+        for (String json : dataList) {
+            list.add(CompletableFuture.runAsync(
+                    () -> genPdfToDir(model, tpl, json), pdfExecutor));
+        }
+
+        // 等全部完成并收集异常
+        CompletableFuture.allOf(list.toArray(new CompletableFuture[0])).join();
+    }
+
+    public void genPdfToDir(FtlModel model, Template temp, String json) {
         File outputDir = null;
         if(model==null||model.getSavePath()==null) {
             throw new RuntimeException("FtlModel有问题：" + model);
@@ -103,14 +123,12 @@ public class PdfUtil {
 
         // 要求：在渲染之前，必须先初始化脚本（对应 model.getTemplateName() 做为 templateId）
         if(!Jsr223FuncCache.hasTemplate(model.getTemplateName())){
-        // 这里示例是读取约定路径：static/script/<templateName>.groovy
-        // 你也可以在 FtlModel 中保存 scriptPath
+            // 这里示例是读取约定路径：static/script/<templateName>.groovy
+            // 你也可以在 FtlModel 中保存 scriptPath
             Jsr223FuncCache.initScriptForTemplate(model.getTemplateName(), model.getScriptContent());
         }
-
         // 注入通用容器到 root，模板内使用 g.funcName(...) 调用脚本函数
         root.put("g", new GroovyFunctionContainer(model.getTemplateName()));
-
         try{
             //temp.process((objectMapper.readValue(json, Object.class)), out);
             temp.process(root, out);
@@ -119,11 +137,12 @@ public class PdfUtil {
             builder.useFastMode();
             builder.withHtmlContent(out.toString(), null);
 
-            builder.useFont(()->new ByteArrayInputStream(simpFontData), "Microsoft YaHei");
+            builder.useFont(()->new ByteArrayInputStream(fallbackFont), "Microsoft YaHei");
+            builder.useFastMode();
             builder.toStream(baos);
             //貌似没问题
             //synchronized (PdfUtil.class) {
-                builder.run();
+            builder.run();
             //}
 
             ////@testFlag:为了测试多线程而sleep
@@ -143,20 +162,19 @@ public class PdfUtil {
         }
     }
 
-    //测试入口
-    public static void main(String[] args) {
-        FtlModel model = new FtlModel();
-        model.setContentRef(IoUtil.readToStr("static/ftl/content1.ftl"));
-        model.setSavePath("D:/PDFS");
-        model.setFirstHeaderRef(IoUtil.readToStr("static/ftl/firstHeader.ftl"));
-        model.setTemplateName("测试");
-        model.setSecHeaderRef("");
-        model.setScriptContent(IoUtil.readToStr("static/scriptSample/simpleGroovy"));
+    private String buildHtml(FtlModel model) {
+        StringBuilder sb = new StringBuilder(8192);
+        sb.append("<html><head><style>")
+                .append(defaultCss)
+                .append("</style></head><body>");
 
-        List<String> strs = new ArrayList();
-        strs.add(IoUtil.readToStr("static/json/sample1.json"));
-        strs.add(IoUtil.readToStr("static/json/sample2.json"));
-        strs.add(IoUtil.readToStr("static/json/sample3.json"));
-        genPdfBatchToDir(model, strs);
+        if (model.getFirstHeaderRef() != null)
+            sb.append("<div class='header'>").append(model.getFirstHeaderRef()).append("</div>");
+
+        sb.append(model.getContentRef());
+        sb.append("</body></html>");
+
+        return sb.toString();
     }
+
 }
