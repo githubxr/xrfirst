@@ -71,7 +71,12 @@
             <version>1.0.10</version>
         </dependency>
 
-
+        <!-- Google Guava 工具库（包含 Cache/CacheBuilder） -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.3-jre</version> <!-- 推荐使用稳定版，可按需更新 -->
+        </dependency>
 
     </dependencies>
 

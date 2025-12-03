@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -17,9 +18,10 @@ import java.util.List;
 @Service
 public class PdfRendererImpl implements PdfRenderer {
 
+    // 【新方法：直接写入 OutputStream】
     @Override
-    public byte[] render(String html, List<FontResource> fonts, String baseUri) {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+    public void render(String html, List<FontResource> fonts, String baseUri, OutputStream os) {
+        try {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             builder.withHtmlContent(html, baseUri);
@@ -31,9 +33,10 @@ public class PdfRendererImpl implements PdfRenderer {
                 }
             }
 
-            builder.toStream(baos);
+            // 【关键变化】：直接将结果导向传入的 OutputStream
+            builder.toStream(os);
             builder.run();
-            return baos.toByteArray();
+
         } catch (Exception e) {
             throw new RuntimeException("PDF render failed", e);
         }

@@ -10,7 +10,7 @@ import org.first.temp.service.ResourceService;
 import org.first.temp.service.ScriptService;
 import org.first.temp.service.TemplateService;
 import org.first.temp.utils.groovy.GroovyFunctionContainer;
-import org.first.temp.utils.groovy.Jsr223FuncCacheUtil;
+//import org.first.temp.utils.groovy.Jsr223FuncCacheUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -50,10 +50,9 @@ public class PdfService {
     }
 
     public void genPdfBatchToDir(FtlModel model, List<String> dataList) {
-        System.out.println("loaded functions: " + Jsr223FuncCacheUtil.hasTemplate(model.getTemplateName()));
-        System.out.println("scriptContent = " + model.getScriptContent());
-        System.out.println("templateName = " + model.getTemplateName());
-
+//        System.out.println("loaded functions: " + Jsr223FuncCacheUtil.hasTemplate(model.getTemplateName()));
+//        System.out.println("scriptContent = " + model.getScriptContent());
+//        System.out.println("templateName = " + model.getTemplateName());
 
         if (model == null || StringUtils.isEmpty(model.getSavePath()))
             throw new IllegalArgumentException("FtlModel or savePath is empty");
@@ -118,12 +117,25 @@ public class PdfService {
             fonts.addAll(resourceService.getActiveFonts());
         //}
 
-        byte[] pdfBytes = pdfRenderer.render(htmlOut.toString(), fonts, null);
+//        byte[] pdfBytes = pdfRenderer.render(htmlOut.toString(), fonts, null);
+//
+//        String fileName = model.getTemplateName() + "_" + UUID.randomUUID() + "_" + ThreadLocalRandom.current().nextInt(1000) + ".pdf";
+//
+//        try (FileOutputStream fos = new FileOutputStream(new File(outDir, fileName))) {
+//            fos.write(pdfBytes);
+//        } catch (Exception e) {
+//            throw new RuntimeException("PDF 写入失败", e);
+//        }
 
+        // 1. 生成文件名
         String fileName = model.getTemplateName() + "_" + UUID.randomUUID() + "_" + ThreadLocalRandom.current().nextInt(1000) + ".pdf";
 
-        try (FileOutputStream fos = new FileOutputStream(new File(outDir, fileName))) {
-            fos.write(pdfBytes);
+        // 2. 使用 FileOutputStream 并直接调用新的 render 方法
+        File pdfFile = new File(outDir, fileName);
+        try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+            // 调用新的流式渲染方法
+            pdfRenderer.render(htmlOut.toString(), fonts, null, fos);
+            // 不需要 pdfBytes 变量了，PDF 在这里被直接写入文件
         } catch (Exception e) {
             throw new RuntimeException("PDF 写入失败", e);
         }
