@@ -1,0 +1,10 @@
+
+
+# 可配置化，避免硬编码
+freemarker:
+  version: 2.3.28
+pdf:
+  save:
+    path: D:/PDFS
+  font:
+    path: classpath:static/font/sim.ttf

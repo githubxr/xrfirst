@@ -44,7 +44,7 @@
     - Feign 接口**确实不需要我们手动写实现类**，而是由**Spring 在运行时通过动态代理自动生成实现类**
 
 - 都没有注册到nacos
-    - 需要添加nacos注册发现的pom依赖
+    - 需要添加nacos注册发现的pom*依赖*
 - pom报错，又是老调重弹的【要先install根 -> 公共 ->父 ->api ->busi -> start...】的顺序
 - 明明自己知道scope的含义，就是没注意这个【<scope>provided</scope>】导致浪费了时间;
 

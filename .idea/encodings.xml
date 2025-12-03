@@ -14,8 +14,18 @@
     <file url="file://$PROJECT_DIR$/order/order-start/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product/product-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product/product-busi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product/product-start/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/product/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/temp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/temp/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/temp/temp-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/temp/temp-busi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/temp/temp-start/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user/user-api/src/main/java" charset="UTF-8" />

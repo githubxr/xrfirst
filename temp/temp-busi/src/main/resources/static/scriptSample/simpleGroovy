@@ -1,0 +1,39 @@
+
+//json依赖
+import groovy.json.JsonSlurper
+
+//初始化json工具
+//def jsonSlurper = new JsonSlurper()
+//def json = jsonSlurper.parseText(jsonStr)  // 解析后是 LinkedHashMap
+
+
+// 前端编写的 Groovy 脚本字符串
+def calcDiscount(item) {
+    if (item.goodsNum > 30) {
+        return 0.8
+    } else if (item.goodsNum > 20) {
+        return 0.9
+    } else {
+        return 1
+    }
+}
+
+def acNum(json){
+    def username = json['0000']['0410']['goodsNum']
+    return username
+}
+
+def caleShowNum(item){
+    if(item.goodsNum>20){
+        return true
+    } else {
+        return false
+    }
+}
+
+def calcConcat(item) {
+    return item.goodsNum+"成功执行groovy计算结果-拼接内容 返回字符串"
+}
+
+// 执行入口(item来自传入的item实例)
+//calcDiscount(item)
