@@ -107,7 +107,8 @@ public class PdfUtil {
             Jsr223FuncCacheUtil.initScriptForTemplate(model.getTemplateName(), model.getScriptContent());
         }
 
-        root.put("g", new GroovyFunctionContainer(model.getTemplateName()));
+        //默认key g
+        root.put("g", new GroovyFunctionContainer(model.getTemplateName(), null));//暂时改为null
 
         StringWriter html = new StringWriter();
         try {

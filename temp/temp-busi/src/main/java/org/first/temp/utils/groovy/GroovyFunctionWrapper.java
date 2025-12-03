@@ -6,6 +6,7 @@ import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.utility.DeepUnwrap;
+import org.first.temp.service.ScriptService;
 
 
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ public class GroovyFunctionWrapper implements TemplateMethodModelEx {
 
     private final String templateId;
     private final String funcName;
+    private final ScriptService scriptService;
 
 
-    public GroovyFunctionWrapper(String templateId, String funcName) {
+    public GroovyFunctionWrapper(String templateId, String funcName, ScriptService scriptService) {
         this.templateId = templateId;
         this.funcName = funcName;
+        this.scriptService = scriptService;
     }
 
 
@@ -42,7 +45,8 @@ public class GroovyFunctionWrapper implements TemplateMethodModelEx {
                 }
                 args = temp.toArray();
             }
-            Object result = Jsr223FuncCacheUtil.invoke(templateId, funcName, args);
+            ////临时测试改动 Object result = Jsr223FuncCacheUtil.invoke(templateId, funcName, args);
+            Object result = scriptService.invoke(templateId, funcName, args);
             return result;
         } catch (Exception e) {
             throw new TemplateModelException("调用脚本函数失败: " + funcName + " templateId=" + templateId, e);

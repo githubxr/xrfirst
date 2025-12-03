@@ -3,6 +3,7 @@ package org.first.temp;
 
 import org.first.basecore.util.IoUtil;
 import org.first.temp.dto.FtlModel;
+import org.first.temp.service.impl.PdfService;
 import org.first.temp.utils.PdfUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,9 @@ public class PdfUtilTest {
     @Autowired
     private PdfUtil pdfUtil;
 
+    @Autowired
+    private PdfService pdfService;
+
     @Test
     public void testPdfGeneration() {
 
@@ -40,5 +44,25 @@ public class PdfUtilTest {
         pdfUtil.genPdfBatchToDir(model, strs);
 
     }
+
+
+    @Test
+    public void v() {
+        System.out.println("运行没错");
+        FtlModel model = new FtlModel();
+        model.setContentRef(IoUtil.readToStr("static/ftl/content1.ftl"));
+        model.setSavePath("D:/PDFS");
+        model.setFirstHeaderRef(IoUtil.readToStr("static/ftl/firstHeader.ftl"));
+        model.setTemplateName("测试");
+        model.setSecHeaderRef("");
+        model.setScriptContent(IoUtil.readToStr("static/scriptSample/simpleGroovy"));
+
+        List<String> strs = new ArrayList();
+        strs.add(IoUtil.readToStr("static/json/sample1.json"));
+        //strs.add(IoUtil.readToStr("static/json/sample2.json"));
+        //strs.add(IoUtil.readToStr("static/json/sample3.json"));
+        pdfService.genPdfBatchToDir(model, strs);
+    }
+
 
 }

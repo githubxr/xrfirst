@@ -4,6 +4,7 @@ package org.first.temp.utils.groovy;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import org.first.temp.service.ScriptService;
 
 
 /**
@@ -15,17 +16,18 @@ public class GroovyFunctionContainer implements TemplateHashModel {
 
 
     private final String templateId;
+    private final ScriptService scriptService;
 
 
-    public GroovyFunctionContainer(String templateId) {
+    public GroovyFunctionContainer(String templateId, ScriptService scriptService) {
         this.templateId = templateId;
+        this.scriptService = scriptService;
     }
 
 
     @Override
     public TemplateModel get(String key) throws TemplateModelException {
-// 返回对特定函数名的 wrapper
-        return new GroovyFunctionWrapper(templateId, key);
+        return new GroovyFunctionWrapper(templateId, key, scriptService);
     }
 
 

@@ -107,7 +107,7 @@ public class PdfUtilOld {
         }
 
         // 注入通用容器到 root，模板内使用 g.funcName(...) 调用脚本函数
-        root.put("g", new GroovyFunctionContainer(model.getTemplateName()));
+        root.put("g", new GroovyFunctionContainer(model.getTemplateName(), null));////暂时改为null
 
         try{
             //temp.process((objectMapper.readValue(json, Object.class)), out);
