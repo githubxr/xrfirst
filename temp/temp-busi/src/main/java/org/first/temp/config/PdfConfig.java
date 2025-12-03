@@ -8,6 +8,8 @@ import freemarker.template.Version;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 
 /**
  * Spring-friendly PDF service that uses Freemarker + OpenHTMLtoPDF.
@@ -45,6 +47,9 @@ public class PdfConfig {
         exec.setQueueCapacity(200);
         exec.setThreadNamePrefix("pdf-exec-");
         exec.initialize();
+
+        // 关键：配置拒绝策略（调用者线程执行，避免任务丢失，适合低并发兜底）
+        exec.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return exec;
     }
 
