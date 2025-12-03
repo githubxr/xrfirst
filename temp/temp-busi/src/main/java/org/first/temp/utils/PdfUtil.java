@@ -165,4 +165,12 @@ public class PdfUtil {
 
         return sb.toString();
     }
+
+//    //更新模板
+//    public void updateTemplate(String templateKey, String html) {
+//        synchronized (templateCache) {
+//            templateCache.put(templateKey, html);
+//            dynamicLoader.putTemplate(templateKey, html);
+//        }
+//    }
 }
