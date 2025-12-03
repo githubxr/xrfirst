@@ -42,7 +42,7 @@ public class GroovyFunctionWrapper implements TemplateMethodModelEx {
                 }
                 args = temp.toArray();
             }
-            Object result = Jsr223FuncCache.invoke(templateId, funcName, args);
+            Object result = Jsr223FuncCacheUtil.invoke(templateId, funcName, args);
             return result;
         } catch (Exception e) {
             throw new TemplateModelException("调用脚本函数失败: " + funcName + " templateId=" + templateId, e);

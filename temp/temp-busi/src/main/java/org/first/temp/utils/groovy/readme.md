@@ -1,7 +1,7 @@
 
 
 
-以Jsr223FuncCache为最终版
+以Jsr223FuncCacheUtil为最终版
 
 
 原理结构：

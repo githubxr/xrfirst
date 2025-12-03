@@ -8,8 +8,7 @@ import freemarker.template.*;
 import org.first.basecore.util.IoUtil;
 import org.first.temp.dto.FtlModel;
 import org.first.temp.utils.groovy.GroovyFunctionContainer;
-import org.first.temp.utils.groovy.Jsr223FuncCache;
-import org.springframework.stereotype.Component;
+import org.first.temp.utils.groovy.Jsr223FuncCacheUtil;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -101,10 +100,10 @@ public class PdfUtilOld {
         }
 
         // 要求：在渲染之前，必须先初始化脚本（对应 model.getTemplateName() 做为 templateId）
-        if(!Jsr223FuncCache.hasTemplate(model.getTemplateName())){
+        if(!Jsr223FuncCacheUtil.hasTemplate(model.getTemplateName())){
         // 这里示例是读取约定路径：static/script/<templateName>.groovy
         // 你也可以在 FtlModel 中保存 scriptPath
-            Jsr223FuncCache.initScriptForTemplate(model.getTemplateName(), model.getScriptContent());
+            Jsr223FuncCacheUtil.initScriptForTemplate(model.getTemplateName(), model.getScriptContent());
         }
 
         // 注入通用容器到 root，模板内使用 g.funcName(...) 调用脚本函数

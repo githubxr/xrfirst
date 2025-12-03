@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  *  并允许后续按 templateId 调用脚本函数，
  *  支持重载/热更新
  */
-public class Jsr223FuncCache {
+public class Jsr223FuncCacheUtil {
 
     private static final ScriptEngineManager MANAGER = new ScriptEngineManager();
     private static final ConcurrentMap<String, Invocable> INVOCABLE_MAP = new ConcurrentHashMap<>();//使用线程安全的容器装载
