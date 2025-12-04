@@ -8,8 +8,6 @@ import freemarker.template.Version;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 
@@ -23,15 +21,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 @org.springframework.context.annotation.Configuration
 public class PdfConfig {
 
-    private static final int TEMPLATE_CACHE_LIMIT = 1000;
-
-    private static final LinkedHashMap<String, String> templateCache =
-        new LinkedHashMap<>(128, 0.75f, true) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry eldest) {
-                return size() > TEMPLATE_CACHE_LIMIT;
-            }
-        };
+//    private static final int TEMPLATE_CACHE_LIMIT = 1000;
+//
+//    private static final LinkedHashMap<String, String> templateCache =
+//        new LinkedHashMap<>(128, 0.75f, true) {
+//            @Override
+//            protected boolean removeEldestEntry(Map.Entry eldest) {
+//                return size() > TEMPLATE_CACHE_LIMIT;
+//            }
+//        };
 
 
     @Bean("freemarkerConfig")

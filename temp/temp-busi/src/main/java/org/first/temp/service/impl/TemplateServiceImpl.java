@@ -22,11 +22,12 @@ public class TemplateServiceImpl implements TemplateService {
     private final StringTemplateLoader loader;
     private final Configuration cfg;
 
-    // O P T I M I Z E D: 使用 Guava Cache 实现 LRU 和过期自动清理
-    private final Cache<String, String> htmlCache = CacheBuilder.newBuilder()
-            .maximumSize(1000)             // 最大缓存数量，避免内存溢出
-            .expireAfterAccess(30, TimeUnit.MINUTES) // 30分钟不访问则自动过期
-            .build();
+    //只用freemarker自带缓存
+//    // O P T I M I Z E D: 使用 Guava Cache 实现 LRU 和过期自动清理
+//    private final Cache<String, String> htmlCache = CacheBuilder.newBuilder()
+//            .maximumSize(1000)             // 最大缓存数量，避免内存溢出
+//            .expireAfterAccess(30, TimeUnit.MINUTES) // 30分钟不访问则自动过期
+//            .build();
     //注意
     public TemplateServiceImpl(StringTemplateLoader loader,@Qualifier("freemarkerConfig") Configuration cfg) {
         this.loader = loader;
@@ -36,8 +37,11 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public Template compile(String templateName, String htmlContent) {
         loader.putTemplate(templateName, htmlContent);
-        htmlCache.put(templateName, htmlContent);
+        //htmlCache.put(templateName, htmlContent);
+
         try {
+            // ★ 新加：强制清除 FreeMarker 缓存
+            cfg.removeTemplateFromCache(templateName);
             return cfg.getTemplate(templateName);
         } catch (IOException e) {
             throw new RuntimeException("template compile failed", e);

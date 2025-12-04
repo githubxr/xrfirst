@@ -151,8 +151,8 @@ public class PdfService {
         return sb.toString();
     }
 
-    @FunctionalInterface
-    public interface ScriptInvoker {
-        Object invoke(String funcName, Object... args);
-    }
+//    @FunctionalInterface
+//    public interface ScriptInvoker {
+//        Object invoke(String funcName, Object... args);
+//    }
 }
