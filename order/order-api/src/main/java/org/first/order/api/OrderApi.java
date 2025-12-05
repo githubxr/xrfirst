@@ -4,7 +4,7 @@ package org.first.order.api;
 import org.first.order.api.fallback.OrderApiFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.first.basecore.constant.OrderConstants;
+import org.first.comm.constant.OrderConstants;
 
 
 //！！fallbackFacotry需要sentinel依赖

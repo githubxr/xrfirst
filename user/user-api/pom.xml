@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>org.first</groupId>
-            <artifactId>base-core</artifactId>
+            <artifactId>comm-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

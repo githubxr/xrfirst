@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>org.first</groupId>
-            <artifactId>base-feign</artifactId>
+            <artifactId>comm-web</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

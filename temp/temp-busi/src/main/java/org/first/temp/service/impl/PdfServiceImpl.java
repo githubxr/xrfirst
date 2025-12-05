@@ -22,7 +22,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 对外暴露的服务：批量 / 单个渲染。
+ * @description 对外暴露的服务：批量 / 单个渲染。
+ * @remark Orchestrator思路： pdfService只做‘编排’不参与实际业务，避免成为‘God Class’
  */
 @Service
 public class PdfServiceImpl {
@@ -72,6 +73,7 @@ public class PdfServiceImpl {
             if (!outDir.exists()) throw new RuntimeException("无法创建保存目录：" + outDir.getAbsolutePath());
         }
 
+        //freemarker模板数据
         Map<String, Object> root;
         try {
             root = objectMapper.readValue(json, Map.class);
@@ -85,10 +87,6 @@ public class PdfServiceImpl {
         }
 
 //        // 绑定脚本容器（简化） - 业务自己在模板里调用 g.invoke('f', args)
-
-
-//        //默认key g
-        Template template = templateService.get(model.getTemplateName());
 
         root.put("g", new GroovyFunctionContainer(model.getTemplateName(), scriptService));
 

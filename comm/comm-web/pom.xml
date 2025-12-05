@@ -5,31 +5,38 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.first</groupId>
-        <artifactId>user</artifactId>
+        <artifactId>comm</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-busi</artifactId>
+    <artifactId>comm-web</artifactId>
+
 
     <dependencies>
+        <!-- Feign 核心依赖（必要） -->
         <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>user-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
+        <!-- JSON 解析，用于解析错误返回体 -->
         <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>order-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- Spring Context（用于 @Configuration  & @Bean）-->
         <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>comm-busi</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
 
+        <!-- Lombok（可选） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <properties>

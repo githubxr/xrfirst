@@ -5,31 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.first</groupId>
-        <artifactId>user</artifactId>
+        <artifactId>comm</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>user-busi</artifactId>
+    <artifactId>comm-core</artifactId>
 
     <dependencies>
+        <!-- Lombok -->
         <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>user-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>order-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83_noneautotype</version>
+            <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.first</groupId>
-            <artifactId>comm-busi</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <properties>

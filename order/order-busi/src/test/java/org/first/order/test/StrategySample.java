@@ -108,7 +108,7 @@ class HolidayPricingStrategy implements PricingStrategy {
 
 
 //测试程序入口
-public class Test {
+class Test {
 
     public static void main(String[] args) {
         //RedisTemplate<String, String> r = null;
