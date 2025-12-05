@@ -32,7 +32,7 @@ spring:
     # MySQL 8.x 驱动类（适配 8.0.27 版本）
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 替换为你的数据库地址、端口、库名
-    url: jdbc:mysql://localhost:3308/xr?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3308/xr?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     # 替换为你的数据库账号密码
     username: root
     password: root

@@ -1,14 +1,19 @@
 
 
+### 待办：
 
+**隔离级别演示（极简版，半小时）**
 
-### 隔离级别
+演示：
 
-测试失败：
+- READ COMMITTED
+- REPEATABLE READ
 
-- InventoryServiceImpl和TransTest.abTest测试的结论是
+只做一个场景：
 
-- 因为即使你设置成 READ UNCOMMITTED，它依旧使用 MVCC，几乎无法在 MySQL 上复现真正的脏读
+- Session A 查询库存
+- Session B 修改库存不提交
+- A 再查库存 → 不同隔离级别表现不同
 
-
-
+不要做 4 套，不要记录太多细节。
+ **能讲 2 分钟 = 完成任务。**

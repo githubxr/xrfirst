@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -70,5 +71,20 @@ public class TransTest {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+   @Test
+    public void t1(){
+       impl.tast1P();
+   }
+
+    @Test
+    public void t2(){
+        impl.tast2P();
+    }
+
+    @Test
+    public void t13(){
+        //impl.tast3P();
     }
 }

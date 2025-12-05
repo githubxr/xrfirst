@@ -9,7 +9,7 @@ import org.first.temp.service.PdfRenderer;
 import org.first.temp.service.ResourceService;
 import org.first.temp.service.ScriptService;
 import org.first.temp.service.TemplateService;
-import org.first.temp.utils.groovy.GroovyFunctionContainer;
+import org.first.temp.script.GroovyFunctionContainer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

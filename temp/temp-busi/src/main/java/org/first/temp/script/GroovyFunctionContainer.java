@@ -1,4 +1,4 @@
-package org.first.temp.utils.groovy;
+package org.first.temp.script;
 
 
 import freemarker.template.TemplateHashModel;
