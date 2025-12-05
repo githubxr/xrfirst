@@ -23,6 +23,7 @@
             <artifactId>temp-busi</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <!--启动类模块单独添加 web容器 -->
         <!-- Web：包含 Tomcat -->
         <dependency>
@@ -37,11 +38,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 

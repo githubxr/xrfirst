@@ -26,10 +26,21 @@
         <version>2.7.18</version>
     </parent>
 
+    <!--    统一管理版本  -->
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
+
+
+        <!-- 持久层 -->
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <xxl-job-core.version>2.4.1</xxl-job-core.version>
+        <fastjson.version>2.0.57</fastjson.version>
+
+        <druid.version>1.2.24</druid.version>
+
+        <mysql-connector-java.version>8.0.27</mysql-connector-java.version>
     </properties>
 
     <dependencyManagement>

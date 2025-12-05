@@ -14,8 +14,9 @@ import java.util.List;
 
 
 /**
+ * 封装为可被java调用的对象
  * 将模板调用转换为对 Jsr223FuncCache.invoke 的调用。
- * 注意：会把模板传进来的 TemplateModel 参数做 DeepUnwrap 转换为 Java 对象。
+ *
  */
 public class GroovyFunctionWrapper implements TemplateMethodModelEx {
 

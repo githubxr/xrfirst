@@ -1,0 +1,3 @@
+
+# 核心配置：让Spring Boot自动加载CommonBeanConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\org.first.common.config.CommonBeanConfig

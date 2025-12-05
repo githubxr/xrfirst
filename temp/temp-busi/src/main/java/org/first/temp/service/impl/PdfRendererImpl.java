@@ -22,6 +22,7 @@ public class PdfRendererImpl implements PdfRenderer {
     @Override
     public void render(String html, List<FontResource> fonts, String baseUri, OutputStream os) {
         try {
+
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             builder.withHtmlContent(html, baseUri);

@@ -1,7 +1,5 @@
 package org.first.temp.service.impl;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -10,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * 基于 StringTemplateLoader 的模板管理：使用 templateName 作为 key，

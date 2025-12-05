@@ -2,6 +2,7 @@ package org.first.temp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.cache.StringTemplateLoader;
+import freemarker.core.XHTMLOutputFormat;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
@@ -39,6 +40,7 @@ public class PdfConfig {
         cfg.setTemplateLoader(dynamicLoader);
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        cfg.setOutputFormat(XHTMLOutputFormat.INSTANCE);//自动转xhtml
         cfg.setLogTemplateExceptions(false);
         cfg.setWrapUncheckedExceptions(true);
         return cfg;
@@ -57,10 +59,10 @@ public class PdfConfig {
         exec.setMaxPoolSize(8);
         exec.setQueueCapacity(200);
         exec.setThreadNamePrefix("pdf-exec-");
-        exec.initialize();
 
         // 关键：配置拒绝策略（调用者线程执行，避免任务丢失，适合低并发兜底）
         exec.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        exec.initialize();
         return exec;
     }
 

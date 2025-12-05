@@ -3,7 +3,7 @@ package org.first.temp;
 
 import org.first.basecore.util.IoUtil;
 import org.first.temp.dto.FtlModel;
-import org.first.temp.service.impl.PdfService;
+import org.first.temp.service.impl.PdfServiceImpl;
 //import org.first.temp.utils.PdfUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ public class PdfUtilTest {
     //private PdfUtil pdfUtil;
 
     @Autowired
-    private PdfService pdfService;
+    private PdfServiceImpl pdfServiceImpl;
 
     @Test
     public void testPdfGeneration() {
@@ -61,7 +61,7 @@ public class PdfUtilTest {
         strs.add(IoUtil.readToStr("static/json/sample1.json"));
         //strs.add(IoUtil.readToStr("static/json/sample2.json"));
         //strs.add(IoUtil.readToStr("static/json/sample3.json"));
-        pdfService.genPdfBatchToDir(model, strs);
+        pdfServiceImpl.genPdfBatchToDir(model, strs);
     }
 
 

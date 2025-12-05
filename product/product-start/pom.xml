@@ -11,6 +11,41 @@
 
     <artifactId>product-start</artifactId>
 
+    <dependencies>
+        <!--     规范 -->
+        <dependency>
+            <groupId>org.first</groupId>
+            <artifactId>product-busi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.first</groupId>
+            <artifactId>base-feign</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--    业务依赖    -->
+
+        <!--启动类模块单独添加 web容器 -->
+        <!-- Web：包含 Tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
