@@ -1,5 +1,6 @@
 package org.first.order;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -15,6 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
         "org.first.order" //自己的bean
         //,"org.first.user.api.fallback" //要feign user的fallback bean
 })
+@MapperScan("org.first.order.mapper")
 public class OrderApplication {
 
     public static void main(String[] args) {

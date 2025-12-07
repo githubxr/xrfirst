@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * @remark 通过spring.factories自动装配
  * @description 自动装配fallback，避免责任变成使用方的
  * @since 25/11/27
  * */

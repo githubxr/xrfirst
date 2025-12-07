@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class Goods {
 
     //@TableId(type = IdType.AUTO)数据库自增
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private String goodsCode;
     private String title;

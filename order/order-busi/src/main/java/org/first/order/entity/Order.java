@@ -1,24 +1,29 @@
 package org.first.order.entity;
 
 
-import lombok.AllArgsConstructor;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
- *
+ * 订单
  * */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@TableName("xr_order")
 public class Order {
+    //@TableId(type = IdType.AUTO)数据库自增
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
-    private String ownerUserCode;
-    private List<OrderItem> goodsList;
+    private String orderCode;
+    private String userCode;
+
+    private BigDecimal totalAmount;
+    private int status;//订单状态
     private String createTime;
-
-
+    private String updateTime;
+    private String payTime;
+    private int deleteFlag;
 }

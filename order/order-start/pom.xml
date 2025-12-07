@@ -18,6 +18,12 @@
             <artifactId>order-busi</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--统一风格引入comm-web-->
+        <dependency>
+            <groupId>org.first</groupId>
+            <artifactId>comm-web</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!--启动类模块单独添加 web容器 -->
         <!-- Web：包含 Tomcat -->
@@ -50,6 +56,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
+        <!-- junit都单独添加把，如果scope设为非test才能传递依赖   -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

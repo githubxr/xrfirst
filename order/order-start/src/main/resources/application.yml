@@ -5,6 +5,27 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  datasource:
+    # MySQL 8.x 驱动类（适配 8.0.27 版本）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 替换为你的数据库地址、端口、库名
+    url: jdbc:mysql://localhost:3308/xr?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    # 替换为你的数据库账号密码
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource # 2.7.x 默认连接池，可省略
+
+  # MyBatis-Plus 基础配置（必加，否则 mapper 扫描失败）
+  mybatis-plus:
+    mapper-locations: classpath:mapper/**/*.xml # 若有 xml 文件需指定路径
+    type-aliases-package: org.first.temp.entity # 替换为你的实体类包名
+    configuration:
+      map-underscore-to-camel-case: true # 驼峰转换
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印 SQL（开发用）
+    global-config:
+      db-config:
+        id-type: AUTO # 若用自增主键，需数据库表先开启 AUTO_INCREMENT
+
 server:
   port: 8002   # 自己定义
 

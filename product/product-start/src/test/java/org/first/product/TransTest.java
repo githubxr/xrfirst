@@ -2,17 +2,15 @@ package org.first.product;
 
 import org.first.product.entity.Inventory;
 import org.first.product.service.IInventoryService;
-import org.first.product.service.impl.InventoryServiceImpl;
+import org.first.product.service.impl.TestServiceInv;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +31,7 @@ public class TransTest {
     //单独导入impl，测试用的taskA,taskB懒得麻烦在interface声明；
     // 另外，我觉得，这里的impl和inventoryService应该是同一个堆对象吧？ 只是类型声明不同， 是泛型机制，一个是直接指向？
     @Autowired
-    private InventoryServiceImpl impl;
+    private TestServiceInv impl;
 
     @Autowired
     @Qualifier("defExecutor")
@@ -51,7 +49,7 @@ public class TransTest {
 
     //1204-Day-test
     @Test
-    public void abTest(){
+    public void abTest() {
         //System.out.println("defExecutor:" + defExecutor);
         //CompletableFuture.supplyAsync(() ->
         CompletableFuture<String> c = CompletableFuture.supplyAsync(()->impl.taskA(), defExecutor);
@@ -84,7 +82,40 @@ public class TransTest {
     }
 
     @Test
-    public void t13(){
-        //impl.tast3P();
+    public void t3(){
+        impl.tast3P();
     }
+
+    //Day3测试：100线程并发扣库存 （丢失更新测试）
+    @Test
+    public void day3A(){
+        //System.out.println("defExecutor:" + defExecutor);
+
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        for(int i=0; i<100; i++) {
+            futures.add(CompletableFuture.runAsync(()->impl.day3A(), defExecutor));
+        }
+        //junit测试得join，否则若主线程不等子线程，主线程结束, junit就会关闭spring容器，程序，其它异步任务线程任务会中止不执行；
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+    }
+
+    //Day3测试：超卖测试 - 原子自减版-200线程并发扣库存
+    @Test
+    public void day3B() {
+        impl.day3B();
+    }
+
+    //Day3测试：超卖测试 - 普通版 - 100线程并发扣库存(2)
+    @Test
+    public void day3C() {
+        impl.day3C(2);
+    }
+
+    //Day3测试：超卖测试 - 乐观锁解决方案测试 - 200线程并发扣库存(3)
+    @Test
+    public void day4A() {
+        int sum = impl.day4A_OptLock(3);
+        System.out.println("运行成功， 成功出库订单数：" + sum);
+    }
+
 }

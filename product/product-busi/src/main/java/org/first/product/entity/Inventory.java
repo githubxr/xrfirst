@@ -12,7 +12,7 @@ import lombok.Data;
 @TableName(value = "xr_product_inventory")
 public class Inventory {
     //@TableId(type = IdType.AUTO)数据库自增
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private String invCode;
     private String goodsCode;
@@ -22,6 +22,7 @@ public class Inventory {
     private String createBy;
     private String updateTime;
     private int deleteFlag;
+    private int versionCode;
 
     @Override
     public String toString(){
