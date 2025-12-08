@@ -18,9 +18,9 @@ def calcDiscount(item) {
     }
 }
 
-def acNum(json){
-    def username = json['0000']['0410']['goodsNum']
-    return username
+def acNum(){
+    return 1;
+
 }
 
 def caleShowNum(item){

@@ -1,4 +1,4 @@
-package org.first.product.rquest;
+package org.first.product.request;
 
 
 import lombok.Data;

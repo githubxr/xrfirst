@@ -18,7 +18,7 @@ spring:
   # MyBatis-Plus 基础配置（必加，否则 mapper 扫描失败）
   mybatis-plus:
     mapper-locations: classpath:mapper/**/*.xml # 若有 xml 文件需指定路径
-    type-aliases-package: org.first.temp.entity # 替换为你的实体类包名
+    type-aliases-package: org.first.order.entity # 替换为你的实体类包名
     configuration:
       map-underscore-to-camel-case: true # 驼峰转换
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印 SQL（开发用）
@@ -45,3 +45,8 @@ feign:
 logging:
   level:
     com.example.user.feign.OrderFeignClient: DEBUG
+    # 关键1：指定Mapper接口所在包为DEBUG级别（必须）
+    org.first.order.mapper: debug  # 替换成你自己的Mapper包路径
+    # 关键2：MyBatis核心类日志级别（可选，兜底）
+    com.baomidou.mybatisplus: debug
+    org.apache.ibatis: debug

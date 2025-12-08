@@ -2,6 +2,7 @@ package org.first.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.first.comm.model.CommonResponse;
 import org.first.product.entity.Inventory;
 import org.first.product.mapper.InventoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,14 +233,15 @@ public class TestServiceInv {
         List<CompletableFuture<Integer>> futures = new ArrayList<>();
         for (int i = 0; i < 200; i++) {
             futures.add(CompletableFuture.supplyAsync(() -> {
-                Inventory inv = inventoryMapper.selectById(TEST_ID3);
-                if (inv.getStockCount() < orderNum) {
-                    System.out.println("逻辑检测到库存不足！");
-                    return 0;
-                }
+
                 int reTryTimes = 3;
                 int reTryDelay = 500;
                 while(reTryTimes-- > 0) {
+                    Inventory inv = inventoryMapper.selectById(TEST_ID3);
+                    if (inv.getStockCount() < orderNum) {
+                        System.out.println("逻辑检测到库存不足！");
+                        return 0;
+                    }
                     int flowRow = inventoryMapper.update(new LambdaUpdateWrapper<Inventory>()
                             .eq(Inventory::getId, TEST_ID3)
                             .eq(Inventory::getVersionCode, inv.getVersionCode())

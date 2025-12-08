@@ -14,6 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {"org.first"})//注意这个得包括别的模块的！
 @SpringBootApplication(scanBasePackages = {
         "org.first.order" //自己的bean
+        ,"org.first.comm" //统一添加comm的包范围
         //,"org.first.user.api.fallback" //要feign user的fallback bean
 })
 @MapperScan("org.first.order.mapper")

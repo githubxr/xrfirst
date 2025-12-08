@@ -28,6 +28,12 @@ spring:
             - Path=/order/**
           filters:
             - StripPrefix=0
+        - id: product-service
+          uri: lb://product
+          predicates:
+            - Path=/product/**
+          filters:
+            - StripPrefix=0
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG  # 网关路由详细日志

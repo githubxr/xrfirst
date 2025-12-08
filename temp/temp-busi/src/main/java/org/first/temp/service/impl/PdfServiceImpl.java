@@ -49,6 +49,11 @@ public class PdfServiceImpl {
         this.pdfExecutor = pdfExecutor;
     }
 
+    /**
+     * @param model 模板信息
+     * @param dataList 渲染数据源
+     * @output 输出到指定目录
+     * */
     public void genPdfBatchToDir(FtlModel model, List<String> dataList) {
 
         if (model == null || StringUtils.isEmpty(model.getSavePath()))

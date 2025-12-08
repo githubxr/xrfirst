@@ -4,7 +4,7 @@ package org.first.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.first.comm.model.CommonResponse;
 import org.first.order.entity.Order;
-import org.first.product.rquest.CreateOrderRequest;
+import org.first.product.request.CreateOrderRequest;
 
 public interface IOrderService extends IService<Order> {
 

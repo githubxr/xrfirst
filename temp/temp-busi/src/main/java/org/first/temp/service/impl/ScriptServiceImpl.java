@@ -39,7 +39,7 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Override
-    public Object invoke(String templateId, String funcName, Object... args) {
+    public Object invoke(String templateId, String funcName,  Object... args) {
         CompiledScriptHolder holder = holderMap.get(templateId);
         if (holder == null) throw new RuntimeException("script not initialized: " + templateId);
 
@@ -50,6 +50,9 @@ public class ScriptServiceImpl implements ScriptService {
 
             if (holder.engine instanceof Invocable) {
                 Invocable inv = (Invocable) holder.engine;
+
+                // 核心：将 FreeMarker 的 root 绑定为 Groovy 的全局变量（命名为 root/ctx 均可）
+                //holder.engine.getContext().setAttribute("root", root, ScriptContext.ENGINE_SCOPE);
                 // Groovy: define function like: def myFunc(a,b) { ... }
                 return inv.invokeFunction(funcName, args);
             } else {

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(
         basePackages = {
                 "org.first.user"
+                ,"org.first.comm" //统一添加comm的包范围
                 //,"org.first.order.config" //测试
                 //,"org.first.order.api.fallback"
         } // 仅扫描Order的Fallback包

@@ -3,7 +3,7 @@ package org.first.product.api.fallback;
 
 import org.first.comm.model.CommonResponse;
 import org.first.product.api.ProductApi;
-import org.first.product.rquest.CreateOrderRequest;
+import org.first.product.request.CreateOrderRequest;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
 public class ProductApiFallbackFactory implements FallbackFactory<ProductApi> {
@@ -17,7 +17,7 @@ public class ProductApiFallbackFactory implements FallbackFactory<ProductApi> {
                 //后面改为log4j打印日志
                 //log.error(err);
                 System.out.println(err);
-                return CommonResponse.error(err, null);
+                return CommonResponse.error(err);
             }
         };
     }

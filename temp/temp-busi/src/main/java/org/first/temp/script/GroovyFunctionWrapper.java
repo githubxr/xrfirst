@@ -1,7 +1,6 @@
 package org.first.temp.script;
 
 
-
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
@@ -11,6 +10,7 @@ import org.first.temp.service.ScriptService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -46,8 +46,12 @@ public class GroovyFunctionWrapper implements TemplateMethodModelEx {
                 }
                 args = temp.toArray();
             }
+
+
+
+
             ////临时测试改动 Object result = Jsr223FuncCacheUtil.invoke(templateId, funcName, args);
-            Object result = scriptService.invoke(templateId, funcName, args);
+            Object result = scriptService.invoke(templateId, funcName,  args);
             return result;
         } catch (Exception e) {
             throw new TemplateModelException("调用脚本函数失败: " + funcName + " templateId=" + templateId, e);

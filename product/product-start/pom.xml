@@ -33,6 +33,32 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Cloud Alibaba Nacos 服务发现核心依赖 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <!-- 版本必须与你的Spring Boot/Spring Cloud版本匹配！-->
+            <version>2021.0.5.0</version>
+        </dependency>
+
+        <!--流控/熔断  -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <!--微服务调用-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Cloud LoadBalancer 核心依赖（负载均衡） -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
         <!-- junit都单独添加把，如果scope设为非test才能传递依赖   -->
         <dependency>
             <groupId>junit</groupId>

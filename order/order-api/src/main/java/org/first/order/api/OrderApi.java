@@ -11,7 +11,7 @@ import org.first.comm.constant.ServerConstants;
 @FeignClient(name = "order", value = ServerConstants.SERVICE_ORDER, fallbackFactory = OrderApiFallbackFactory.class)
 public interface OrderApi {
 
-    @GetMapping("/order/demoBusi/hello")
+    @GetMapping("/demoBusi/hello")
     String hello();
 
 
