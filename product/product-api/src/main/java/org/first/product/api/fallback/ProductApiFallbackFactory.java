@@ -12,7 +12,7 @@ public class ProductApiFallbackFactory implements FallbackFactory<ProductApi> {
     public ProductApi create(Throwable cause) {
         return new ProductApi() {
             @Override
-            public CommonResponse<String> deductStock(CreateOrderRequest req) {
+            public CommonResponse<CreateOrderRequest> deductStock(CreateOrderRequest req) {
                 String err = "Feign调用失败：" + cause.getMessage();
                 //后面改为log4j打印日志
                 //log.error(err);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface ProductApi {
 
     @PostMapping("product/deductStock")
-    CommonResponse<String> deductStock(CreateOrderRequest req);
+    CommonResponse<CreateOrderRequest> deductStock(CreateOrderRequest req);
 
 
 

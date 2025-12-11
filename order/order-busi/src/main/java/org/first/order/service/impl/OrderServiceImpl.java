@@ -1,8 +1,10 @@
 package org.first.order.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.first.comm.model.CommonResponse;
+import org.first.comm.util.DateUtil;
 import org.first.order.entity.Order;
+import org.first.order.entity.OrderItem;
+import org.first.order.mapper.OrderItemMapper;
 import org.first.order.mapper.OrderMapper;
 import org.first.product.request.CreateOrderRequest;
 import org.first.order.service.IOrderService;
@@ -13,18 +15,17 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
     @Autowired
-    private ProductApi productApi;
-
+    private ProductApi productApi;//feignClient of product module
     @Autowired
-    private OrderMapper orderMapper;
-
+    private OrderItemMapper orderItemMapper;
     @Autowired
     private RedissonClient redisson;
 
@@ -34,25 +35,56 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         //为新订单生成编号：36位去除横线，得32位
         String newOrderCode = UUID.randomUUID().toString().replace("-", "");
 
-        //step1 创建草稿订单
-        Order order = new Order();
-        order.setOrderCode(newOrderCode);           // 业务参数
-        order.setUserCode(request.getUserCode());   // 业务参数
-        order.setStatus(0);                         // 草稿状态
-        order.setTotalAmount(new BigDecimal(0));////后面有时间添加计算价格的代码
-        orderMapper.insert(order);
+        //step1 更新锁定库存
+        CreateOrderRequest res = deductStockOrFail(request);
+        //step2 创建订单
+        Order order = buildOrder(res);
+        //订单items
+        List<OrderItem> itemList = buildOrderItems(res.getItems(), order);
 
-        //step2 更新锁定库存
-        CommonResponse res = productApi.deductStock(request);
-        if(res.getCode()!=200) {
-            orderMapper.delete(new LambdaQueryWrapper<Order>()
-                    .eq(Order::getOrderCode, newOrderCode));
-            throw new RuntimeException("下单失败，检查库存");//通过异常回滚
-            //return CommonResponse.success("下单失败，检查库存");
-        }
+        //step3 插入订单记录
+        baseMapper.insert(order);
+        orderItemMapper.insert(itemList);
 
         return CommonResponse.success("下单成功，尽快支付（30min）");
     }
 
+    private CreateOrderRequest deductStockOrFail(CreateOrderRequest req) {
+        CommonResponse<CreateOrderRequest> res = productApi.deductStock(req);
+        if (res.getCode() != 200) {
+            //无法确定product模块是否执行成功，在此处自己（order）回滚前，发起SAGA补偿，让product微服务取消掉可能的库存锁定；
+            //注意，这种方法只能保证概率性一致，非强一致性，不太可靠的哦;
+            //productApi.cancelDeductStock(req);
+            throw new RuntimeException("库存不足：" + res.getMessage());//异常触发回滚
+        }
+        CreateOrderRequest data = res.getData();
+        if (!req.getOrderCode().equals(data.getOrderCode())) {
+            throw new RuntimeException("库存服务返回订单号不一致");
+        }
+        return data;
+    }
+
+    private Order buildOrder(CreateOrderRequest resData) {
+        Order order = new Order();
+        order.setOrderCode(resData.getOrderCode());
+        order.setStatus(0);
+        order.setCreateTime(DateUtil.getCurrentDateTimeStr());
+        order.setTotalAmount(resData.getTotalAmount());
+        return order;
+    }
+
+    //
+    private List<OrderItem> buildOrderItems(List<CreateOrderRequest.OrderItemReq> resItem, Order order) {
+        List<OrderItem> list = new ArrayList<>();
+        for (CreateOrderRequest.OrderItemReq r : resItem) {
+            OrderItem item = new OrderItem();
+            item.setOrderCode(order.getOrderCode());
+            item.setGoodsNum(r.getGoodsNum());
+            item.setCreateTime(order.getCreateTime());
+            item.setGoodsPriceSnapshot(r.getPriceSnapshot());
+            list.add(item);
+        }
+        return list;
+    }
 }
 
