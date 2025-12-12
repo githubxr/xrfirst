@@ -162,6 +162,11 @@ org.first.order.config.OrderFeignAutoConfiguration
 - 优化的核心：**索引 + 过滤顺序**
 - MySQL 与 NULL 任何比较都是 NULL
   - 必须用 `is null / is not null`
+- 聚合函数**只能聚合单列**，不能把那一列所属的行的其它列也一起聚合
+  - 没有“拉出整行”的能力
+- 在“分组结果”本身上，所有 **GROUP BY a, b, c ...**的**顺序无所谓**
+- cet表达式用的时候发现，**from a,b这种写法会隐式的inner join**
+- 
 
 ------
 

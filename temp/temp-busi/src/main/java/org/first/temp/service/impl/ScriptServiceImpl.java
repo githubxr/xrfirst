@@ -30,7 +30,7 @@ public class ScriptServiceImpl implements ScriptService {
             throw new RuntimeException("script engine not compilable");
         }
         Compilable comp = (Compilable) engine;
-        try {
+        try {//编译脚本内容（所有函数）
             CompiledScript cs = comp.compile(scriptContent == null ? "" : scriptContent);
             holderMap.put(templateId, new CompiledScriptHolder(cs, engine));
         } catch (ScriptException e) {
