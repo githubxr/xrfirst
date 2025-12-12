@@ -32,9 +32,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Transactional//默认传播范围/默认隔离级别
     @Override
     public CommonResponse<String> createOrder(CreateOrderRequest request) {
-        //为新订单生成编号：36位去除横线，得32位
-        String newOrderCode = UUID.randomUUID().toString().replace("-", "");
-
         //step1 更新锁定库存
         CreateOrderRequest res = deductStockOrFail(request);
         //step2 创建订单
@@ -55,6 +52,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             //无法确定product模块是否执行成功，在此处自己（order）回滚前，发起SAGA补偿，让product微服务取消掉可能的库存锁定；
             //注意，这种方法只能保证概率性一致，非强一致性，不太可靠的哦;
             //productApi.cancelDeductStock(req);
+            //...day25添加【强一致性分布式事务】来确保可靠，这里先不搞补偿接口
             throw new RuntimeException("库存不足：" + res.getMessage());//异常触发回滚
         }
         CreateOrderRequest data = res.getData();
@@ -66,7 +64,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     private Order buildOrder(CreateOrderRequest resData) {
         Order order = new Order();
-        order.setOrderCode(resData.getOrderCode());
+        //为新订单生成编号：36位去除横线，得32位
+        String newOrderCode = UUID.randomUUID().toString().replace("-", "");
+        order.setOrderCode(newOrderCode);
         order.setStatus(0);
         order.setCreateTime(DateUtil.getCurrentDateTimeStr());
         order.setTotalAmount(resData.getTotalAmount());

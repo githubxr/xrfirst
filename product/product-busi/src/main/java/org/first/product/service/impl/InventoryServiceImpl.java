@@ -51,7 +51,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         //step1：查库存（乐观锁兜底）
         for(CreateOrderRequest.OrderItemReq item: req.getItems()) {
             int status = 0;
-            int reTryTimes = 3;
+            int reTryTimes = 2;
             int reTryDelay = 500;
             do {
                 //Inventory inv = invMap.get(item.getGoodsCode());
