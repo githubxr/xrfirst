@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.first.comm.constant.CommonConstant;
 
+/**
+ * 项目统一返回体
+ * */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

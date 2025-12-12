@@ -11,6 +11,7 @@ import org.first.comm.constant.ServerConstants;
 @FeignClient(name = "order", value = ServerConstants.SERVICE_ORDER, fallbackFactory = OrderApiFallbackFactory.class)
 public interface OrderApi {
 
+    //单测试
     @GetMapping("/demoBusi/hello")
     String hello();
 

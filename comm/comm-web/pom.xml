@@ -31,12 +31,13 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
-        <!-- Lombok（可选） -->
+        <!-- Lombok（屏蔽，core已引入）
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.first</groupId>

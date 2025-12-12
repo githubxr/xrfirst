@@ -1,55 +1,114 @@
+ 
+
+
+
+# 30day练手项目
 
 
 
 
 
-# 2025
+****
+
+### 1 核心实现链路
+
+- 下单链路 √
+
+  - 链路：order/order-busi/orderService.createOrder 
+
+    -> product/product-busi/InventoryService.deductStock
+
+- 付款 ing
+
+  - 链路：
 
 
 
 
 
-11/20开始
 
-### 周记11/21~23
+****
+
+### 2 架构设计
+
+##### 图示
+
+（.\\pic\模块依赖关系可视化.png)
+
+![模块依赖关系可视化](E:\workspace\firstProj\xran\doc\pic\模块依赖关系可视化.png)
+
+****
+
+##### 文字表示
+
+###### common（公共依赖）
+
+- common-feign（风格是，所有xx-start一般都会引入此模块）
+  - 代码：feign统一异常；errorDecoder（前两者springboot自动装配暴露）；通用返回结构；
+  - 依赖：openfeign/sentinel/nacos-discovery/json/spring-web
+  - 结构初衷：避免web容器依赖出现在xx-api或xx-busi）
+- common-core（风格是，所有xx-api一般都会引入此模块）
+  - 代码：工具/切面/注解/常量定义
+
+  - 依赖：lombok，json....
+- common-busi（风格是，所有xx-busi一般都会引入此模块）
+  - 代码：暂无
+  - 依赖：jdbc/mybatis/redis/redssion
+- （后续可能需要添加其它的common-xx之类的，如果不多，例如只有少数依赖内容就不需要）；
+
+###### user
+
+- user-api
+  - 依赖：common-core
+  - 代码：feignclient / vo(前端) / DTO(可开放的业务类) ...
+- user-busi
+  - 依赖：自己的user-api, common-busi
+  - 代码：entity(entity不能开放到api里面开发，和do一样是私有的)/mapper/service...等业务代码
+- user-start
+  - 依赖：自己的user-busi,  common-feign
+  - 代码：
+  - remark：controller(不一定非得放start，后续看实际情况，有可能移回busi)，application启动类...yml web配置之类的...
+
+###### product（子结构均同user）
+
+- 包含产品，库存
+
+###### order（子结构均同user）
+
+- 订单相关业务
+
+###### payment（子结构均同user）
+
+- 支付相关业务（这个30day计划.md，只需要，模拟支付，写好相关业务代码即可，不需要真实对接）
+
+###### gateway
+
+- （30day计划 只需做好基本路由，已达成）
+
+###### nacos
+
+-  直接（ startup.cmd -m standalone），暂时不建立模块配置nacos
+
+###### 前端vue 
+
+- 暂时不管
 
 
-##### 记录
 
-- 选型，用springcloud alibaba吧 4
-- nacos启动 5
-    - 经过问题的四条解决，成功在nacos看到了order和user；
-    - 成功调用了微服务，返回：【controller.call api:Feign result：hello + 入参：null】
-      - 但是不确定是否真的走了微服务链路；且目前貌似没有走gateway（都没加...）直接访问的目标application
+##### 包划分规则：
 
-
-
-##### Week Detail
-
-- nacos
-
-    - ```
-    startup.cmd -m standalone
-    http://localhost:8848/nacos
-    ```
-
--
+- bo：业务
+  dto：对外
+  entity：单纯表
 
 
 
-##### 问题
+****
 
-- 以为EnableFeignClients只需要扫描模块所属模块，实际上需要包括整个项目所有模块；
-- Feign 接口为什么不需要实现类？
-    - Feign 接口**确实不需要我们手动写实现类**，而是由**Spring 在运行时通过动态代理自动生成实现类**
+### 3 详细笔记
 
-- 都没有注册到nacos
-    - 需要添加nacos注册发现的pom*依赖*
-- pom报错，又是老调重弹的【要先install根 -> 公共 ->父 ->api ->busi -> start...】的顺序
-- 明明自己知道scope的含义，就是没注意这个【<scope>provided</scope>】导致浪费了时间;
+##### 规划： ./doc/30day_plan.md
 
+##### 知识笔记：./doc/knowedge.md
 
-
-
-### 周记11/21~23 
-- 待定...
+##### 推进日志：./doc/progress-log.md
